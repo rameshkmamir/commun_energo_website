@@ -1,0 +1,37 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Регстрация</title>
+  <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="form-container">
+  <form method="post" class="register-form">
+    <img src="{% static '/main/img/logo.png' %}" alt="logo">
+    <h1>Регистрация</h1>
+    <div class="alert alert-danger">
+      {% csrf_token %}
+      {% for field in form %}
+      {{ field.label_tag }} {{ field }}
+      {% if field.help_text %}
+      <small>{{ field.help_text }}</small>
+      {% endif %}
+      <div class="errors">
+        {% for error in field.errors %}
+        <p>{{ error }}</p>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+    <button type="submit" class="registration-btn">Зарегистрироваться</button>
+    <a href="{% url 'login' %}">Войдите, если есть аккаунт</a>
+  </form>
+</div>
+</body>
+</html>
