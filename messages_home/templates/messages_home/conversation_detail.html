@@ -16,14 +16,20 @@
         <option class="status-option" value="Отложена">Отложена</option>
         <option class="status-option" value="Закрыта">Закрыта</option>
       </select>
-      <select class="form-control forms-stat-date message-form-select" id="names" name="names">
+      <select class="form-control forms-stat-date message-form-select" id="names" name="names"
+        data-conversation-id="{{ conversation.id }}" onchange="updateConversationUser()">
         {% if conversation.user2 %}
-        <option class="status-option" selected hidden>{{ conversation.user2.first_name }} {{ conversation.user2.last_name }}</option>
+        <option class="status-option">Не назначен</option>
         {% else %}
         <option class="status-option" selected hidden>Не назначен</option>
         {% endif%}
         {% for support_user in support_users %}
+        {% if conversation.user2 == support_user %}
+        <option class="status-option" selected>{{ conversation.user2.first_name }} {{ conversation.user2.last_name }}
+        </option>
+        {% else %}
         <option class="status-option">{{ support_user.first_name }} {{ support_user.last_name }}</option>
+        {% endif%}
         {% endfor %}
       </select>
     </div>
@@ -37,13 +43,13 @@
         <div class="message-text">{{ message.text }}</div>
         <div class="attachments">
           {% if message.attachment is not None %}
-              {% if message.attachment.file|is_image %}
-                  <img class="attacment-img" src="{{ message.attachment.file.url }}" alt="{{ message.attachment.file.name }}">
-              {% else %}
-                  <a href="{{ message.attachment.file.url }}">{{ message.attachment.file.name|replace:'attachments/' }}</a>
-              {% endif %}
+          {% if message.attachment.file|is_image %}
+          <img class="attacment-img" src="{{ message.attachment.file.url }}" alt="{{ message.attachment.file.name }}">
+          {% else %}
+          <a href="{{ message.attachment.file.url }}">{{ message.attachment.file.name|replace:'attachments/' }}</a>
           {% endif %}
-        </div>  
+          {% endif %}
+        </div>
         <div class="message-timestamp">{{ message.created_at }}</div>
       </div>
       {% endfor %}
@@ -77,7 +83,7 @@
 {% block scripts %}
 <script>
   $(document).ready(function () {
-    
+
     var attachmentFile = null; // переменная для хранения выбранного файла
     const fileInput = document.getElementById('message-attachment');
     const attachBtn = document.querySelector('.attach-file-btn');
@@ -142,15 +148,15 @@
             else {
               var attachmentType = '<div class="attacments"><a class="message-file" href="' + attachmentUrl + '">' +
                 attachmentUrl.slice(12) + '</a>' +
-              '</div>'
+                '</div>'
             }
-            
-            var messageBox = 
-                messageBoxDefinition + ' data="' + JSON.stringify(message) + '">' +
-                '<div class="message-sender">' + senderFirstName + ' ' + senderLastName + '</div>' +
-                '<div class="message-text">' + message.text + '</div>' +
-                attachmentType +
-                '<div class="message-timestamp">' + message.created_at + '</div>' +
+
+            var messageBox =
+              messageBoxDefinition + ' data="' + JSON.stringify(message) + '">' +
+              '<div class="message-sender">' + senderFirstName + ' ' + senderLastName + '</div>' +
+              '<div class="message-text">' + message.text + '</div>' +
+              attachmentType +
+              '<div class="message-timestamp">' + message.created_at + '</div>' +
               '</div>';
           }
           else {
@@ -160,14 +166,14 @@
             else {
               var messageBoxDefinition = '<div class="message-box message-left'
             }
-            var messageBox = 
-                messageBoxDefinition + ' data="' + JSON.stringify(message) + '">' +
-                '<div class="message-sender">' + senderFirstName + ' ' + senderLastName + '</div>' +
-                '<div class="message-text">' + message.text + '</div>' +
-                '<div class="message-timestamp">' + message.created_at + '</div>' +
+            var messageBox =
+              messageBoxDefinition + ' data="' + JSON.stringify(message) + '">' +
+              '<div class="message-sender">' + senderFirstName + ' ' + senderLastName + '</div>' +
+              '<div class="message-text">' + message.text + '</div>' +
+              '<div class="message-timestamp">' + message.created_at + '</div>' +
               '</div>';
           }
-          
+
           $(".chat-box").append(messageBox);
           $(".send-message-form textarea").val("");
 
@@ -185,6 +191,7 @@
         }
       });
     }
+
     var chatBox = document.querySelector('.chat-box');
     chatBox.scrollTop = chatBox.scrollHeight;
   });

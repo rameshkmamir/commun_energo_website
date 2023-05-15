@@ -66,9 +66,16 @@ def conversations_list(request):
         conversations = conversations.filter(sender_filter)
 
     if recipient:
-        recipient_filter = Q(user2__first_name__icontains=recipient) | Q(
-            user2__last_name__icontains=recipient)
+        recipient = unquote_plus(recipient)
+        recipient_parts = recipient.split()
+        if len(recipient_parts) >= 2:
+            recipient_filter = Q(user2__first_name__icontains=recipient_parts[0]) | Q(
+                user2__last_name__icontains=recipient_parts[1])
+        else:
+            recipient_filter = Q(user2__first_name__icontains=recipient) | Q(
+                user2__last_name__icontains=recipient)
         conversations = conversations.filter(recipient_filter)
+
     return render(request, 'messages_home/conversations_list.html', {
         'conversations': conversations
     })
@@ -202,3 +209,16 @@ def conversation_new(request):
     else:
         form = ConversationForm()
     return render(request, 'messages_home/new_conversation.html', {'form': form})
+
+@login_required
+def update_conversation_user(request, conversation_id):
+    print(conversation_id)
+    print(conversation_id)
+    user_id = request.POST.get("user_id")
+    print(request)
+    print(user_id)
+    # conversation = Conversation.objects.get(pk=conversation_id)
+    # user = User.objects.get(pk=user_id)
+    # conversation.user2 = user
+    # conversation.save()
+    # return JsonResponse({"success": True})
