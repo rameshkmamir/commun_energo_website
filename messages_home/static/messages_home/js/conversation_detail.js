@@ -10,12 +10,9 @@ function updateConversationUser() {
     request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     request.onload = function() {
       if (request.status === 200) {
-        console.log(200)
       } else {
-        // Действия при ошибке запроса
       }
     };
-    console.log(conversationId, selectedUser)
     const data = {
       user_id: selectedUser,
       conversation_id: conversationId

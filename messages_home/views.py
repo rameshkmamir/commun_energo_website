@@ -10,6 +10,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 import imghdr
+import json
 from .forms import MessageForm, ConversationForm
 from .models import Conversation, Message, Attachment
 
@@ -212,13 +213,18 @@ def conversation_new(request):
 
 @login_required
 def update_conversation_user(request, conversation_id):
-    print(conversation_id)
-    print(conversation_id)
     user_id = request.POST.get("user_id")
+    print(user_id)
+    body_unicode = request.body.decode('utf-8')
+    data = json.loads(body_unicode)
+    user_id = data.get("user_id")
     print(request)
     print(user_id)
-    # conversation = Conversation.objects.get(pk=conversation_id)
-    # user = User.objects.get(pk=user_id)
-    # conversation.user2 = user
-    # conversation.save()
-    # return JsonResponse({"success": True})
+    conversation = Conversation.objects.get(pk=conversation_id)
+    try: 
+        user = User.objects.get(first_name=user_id.split(' ')[0], last_name=user_id.split(' ')[1])
+    except: 
+        user = None
+    conversation.user2 = user
+    conversation.save()
+    return JsonResponse({"success": True})

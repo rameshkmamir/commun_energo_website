@@ -77,9 +77,11 @@ aside ul li:hover, aside a:hover {
 
 .topline-content {
   display: flex;
-    padding: 10px;
-    width: 100%;
-    height: 7vh;
+  padding: 10px 10px 10px 8px;
+  width: 100%;
+  height: 7vh;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .topline-content h1 {
@@ -244,14 +246,6 @@ input[type="password"] {
 
 .table {
     width: 100%;
-}
-
-.col-md-8 {
-  background-color: rgba(15, 41, 84, 0.189);
-  border-radius: 5px;
-  padding: 0px;
-  width: 90%;
-  margin-top: 10px;
 }
 
 .conversation-title {
@@ -494,11 +488,7 @@ input[type="password"] {
 
 }
 
-.topline-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+
 
 .user-name {
   margin-right: 5px;
@@ -515,6 +505,7 @@ input[type="password"] {
 
 .status-option {
   background-color: #222;
+  text-align: center;
 }
 
 .form-control:active {
@@ -533,17 +524,23 @@ input[type="password"] {
   background-color: #333;
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
+  justify-content: baseline;
+}
+
+.conversation-title {
+  width: 60%;
 }
 
 .message-form-select {
   margin-top: 15px;
-  max-width: 140px;
+  max-width: 15%;
+  margin-left: 3%;
+  text-align: center;
 }
 
 .row {
   display: flex;
   width: 100%;
-  margin-right: 10px;
 }
 
 .page-name h1 {
@@ -563,3 +560,4 @@ input[type="password"] {
   max-height: 100%;
   max-width: 100%;
 }
+

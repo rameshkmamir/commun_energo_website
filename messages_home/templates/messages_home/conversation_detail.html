@@ -5,11 +5,13 @@
 <h1>Тема обращения: "{{ conversation.title }}"</h1>
 {% endblock%}
 {% block main_content %}
-<div class="row justify-content-center">
-  <div class="col-md-8">
+<div class="row">
+  <div class="col-md-12">
     {% if user.groups.all.0.name != 'Обычные пользователи'%}
     <div class="conversation-topline">
-      <h2 class="conversation-title">{{ conversation.user1.first_name }} {{ conversation.user1.last_name }}</h2>
+      <div class="conversation-title">
+        <h2>{{ conversation.user1.first_name }} {{ conversation.user1.last_name }}</h2>
+      </div>
       <select class="form-control forms-stat-date message-form-select" id="status" name="status">
         <option class="status-option" selected hidden>{{ conversation.status }}</option>
         <option class="status-option" value="Активная">Активная</option>
@@ -44,7 +46,7 @@
         <div class="attachments">
           {% if message.attachment is not None %}
           {% if message.attachment.file|is_image %}
-          <img class="attacment-img" src="{{ message.attachment.file.url }}" alt="{{ message.attachment.file.name }}">
+          <img class="attachment-img" src="{{ message.attachment.file.url }}" alt="{{ message.attachment.file.name }}">
           {% else %}
           <a href="{{ message.attachment.file.url }}">{{ message.attachment.file.name|replace:'attachments/' }}</a>
           {% endif %}
@@ -142,11 +144,11 @@
             }
             var isImage = attachmentUrl.endsWith('.jpg') || attachmentUrl.endsWith('.png') || attachmentUrl.endsWith('.gif');
             if (isImage) {
-              var attachmentType = '<div class="attachments"><img class="attacment-img" src="' + attachmentUrl + '">' +
+              var attachmentType = '<div class="attachments"><img class="attachment-img" src="' + attachmentUrl + '">' +
                 '</div>'
             }
             else {
-              var attachmentType = '<div class="attacments"><a class="message-file" href="' + attachmentUrl + '">' +
+              var attachmentType = '<div class="attachments"><a class="message-file" href="' + attachmentUrl + '">' +
                 attachmentUrl.slice(12) + '</a>' +
                 '</div>'
             }
