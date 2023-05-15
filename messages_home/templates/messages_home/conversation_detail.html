@@ -123,6 +123,7 @@
       if (attachmentFile !== null) {
         formData.append('message_attachment', attachmentFile);
       }
+      
       $.ajax({
         type: "POST",
         url: $(".send-message-form").attr("action"),
@@ -178,6 +179,10 @@
 
           $(".chat-box").append(messageBox);
           $(".send-message-form textarea").val("");
+          
+
+          attachmentFile = null; // Сброс переменной attachmentFile
+          $('#message-attachment').val(''); // Очистка значения поля вложения
 
           // Находим контейнер с сообщениями
           var chatBox = document.querySelector(".chat-box");
