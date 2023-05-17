@@ -20,6 +20,28 @@ function updateConversationUser() {
     request.send(JSON.stringify(data));
   }
 
+  function updateConversationStatus() {
+    const selectElement = document.getElementById('status')
+    const csrfToken = getCookie('csrftoken');
+    const conversationId = selectElement.getAttribute('data-conversation-id');
+    const selectedStatus = selectElement.value;
+
+    const request = new XMLHttpRequest();
+    request.open('POST', 'messages/conversations/' + conversationId + '/update-conversation-status/');
+    request.setRequestHeader('X-CSRFToken', csrfToken)
+    request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    request.onload = function() {
+      if (request.status === 200) {
+      } else {
+      }
+    };
+    const data = {
+      selected_status: selectedStatus,
+      conversation_id: conversationId
+    };
+    request.send(JSON.stringify(data));
+  }
+
   function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {

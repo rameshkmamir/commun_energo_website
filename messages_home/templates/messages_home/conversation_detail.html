@@ -12,7 +12,7 @@
       <div class="conversation-title">
         <h2>{{ conversation.user1.first_name }} {{ conversation.user1.last_name }}</h2>
       </div>
-      <select class="form-control forms-stat-date message-form-select" id="status" name="status">
+      <select class="form-control forms-stat-date message-form-select" id="status" name="status" data-conversation-id="{{ conversation.id }}" onchange="updateConversationStatus()">
         <option class="status-option" selected hidden>{{ conversation.status }}</option>
         <option class="status-option" value="Активная">Активная</option>
         <option class="status-option" value="Отложена">Отложена</option>
