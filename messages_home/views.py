@@ -227,11 +227,10 @@ def update_conversation_user(request, conversation_id):
 
 @login_required 
 def update_conversation_status(request, conversation_id):
-    data = json.loads(body_unicode)
     body_unicode = request.body.decode('utf-8')
+    data = json.loads(body_unicode) 
     status_id = data.get("selected_status")
     conversation = Conversation.objects.get(pk=conversation_id)
-    status = Conversation.objects.get(status=status_id)
-    conversation.status = status
+    conversation.status = str(status_id)
     conversation.save()
     return JsonResponse({"success": True})

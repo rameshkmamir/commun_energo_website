@@ -25,5 +25,6 @@ urlpatterns = [
                 path('messages/', include('messages_home.urls')),
                 path('register/', include('registration.urls')),
                 path('login/', include('login.urls')),
-                path('media/', include('attachment.urls'))
+                path('media/', include('attachment.urls')),
+                path('users/', include('users.urls'))
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

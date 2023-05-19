@@ -34,6 +34,7 @@ INSTALLED_APPS = [
   'messages_home',
   'registration',
   'login',
+  'users',
   'attachment',
   'django.contrib.admin',
   'django.contrib.auth',
