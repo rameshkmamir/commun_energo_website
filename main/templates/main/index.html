@@ -1,11 +1,11 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}Главная{% endblock %}
+{% block title %}Статистика{% endblock %}
 
 {% load static %}
 
 {% block pagename %}
-<h1>Главная</h1>
+<h1>Статистика</h1>
 {% endblock%}
 
 {% block main_content %}
@@ -79,17 +79,37 @@
               x: {
                 title: {
                   display: true,
-                  text: 'Дата'
+                  text: 'Дата',
+                  color: '#fff',
+                },
+                ticks: {
+                  color: '#fff',
                 }
+                
               },
               y: {
                 title: {
                   display: true,
-                  text: 'Количество заявок'
+                  text: 'Количество заявок',
+                  color: '#fff',
                 },
                 ticks: {
-                  stepSize: 1 // Отображать только целые числа на оси Y
+                  stepSize: 1,
+                  color: '#fff', // Отображать только целые числа на оси Y
                 }
+              }
+            },
+            plugins: {
+              title: {
+                display: true,
+                text: 'График заявок по датам',
+                color: '#fff', // Название графика
+              },
+              legend: {
+                labels: {
+                  color: '#fff',
+                }
+                
               }
             }
           };
@@ -105,7 +125,6 @@
 
     </div>
     <div class="layout-content">
-      <p>Добро пожаловать, {{ request.user.first_name }} {{ request.user.last_name }}</p>
       <button id="filter-btn" class="blue-button">
         Фильтры
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel"
@@ -117,47 +136,39 @@
       <div class="filter-form-conversations" id="q1s1">
         <form method="get" class="filter-form" action="">
           <div class="filters-boxes">
-            <div class="filters-up-row">
-              <div class="filters-up-row" style="margin-top: 15px;">
+            <div class="filters-up-row" style="margin-top: 15px;">
                 <div class="user_box filter-box">
-                  <label for="user-name">Назначена на сотрудника</label>
-                  <input type="text" class="" id="user-name" placeholder="Введите имя пользователя">
+                  <label for="user_name">Назначена на сотрудника</label>
+                  <input type="text" class="" id="user_name" name="user_name" placeholder="Введите имя пользователя">
                 </div>
-                <div class="status-box filter-box">
-                  <label for="status">Статус заявки</label>
-                  <select class="form-control forms-stat-date" id="status" name="status">
-                    <option class="status-option" selected hidden value="">Выберите значение</option>
-                    <option class="status-option" value="Активная">Активная</option>
-                    <option class="status-option" value="Отложена">Отложена</option>
-                    <option class="status-option" value="Закрыта">Закрыта</option>
-                  </select>
+                <div class="date-box-1 filter-box">
+                  <label for="date_start">Обращение от</label>
+                  <input type="date" class="form-control forms-stat-date" id="date" name="date_start">
                 </div>
-              </div>
-              <div class="filters-bot-row">
-                <div class="date-box filter-box">
-                  <label for="date">Обращение от</label>
-                  <input type="date" class="form-control forms-stat-date" id="date" name="date">
-                </div>
-                <div class="date-box filter-box">
-                  <label for="date">Обращение до</label>
-                  <input type="date" class="form-control forms-stat-date" id="date" name="date">
+                <div class="date-box-1 filter-box">
+                  <label for="date_end">Обращение до</label>
+                  <input type="date" class="form-control forms-stat-date" id="date" name="date_end">
                 </div>
 
                 <div class="btn-box filter-box">
-                  <button type="submit" id='w131' class="submit-btn-filter">Фильтровать</button>
+                  <button type="submit" id='w131' class="submit-btn-filter btn-stat-filter">Фильтровать</button>
                 </div>
-              </div>
             </div>
 
           </div>
         </form>
       </div>
-      <div class="messages-stat">
         <div id="data" style="display: none;">{{ data|safe }}</div>
-        <canvas id="chart"></canvas>
-      </div>
-      <div class="new-messages">
-      </div>
+        <div class="container">
+          <div class="left-block">
+            <canvas id="chart">
+            </canvas>
+          </div>
+          <div class="right-block">
+            <div class="top-right-block">Верхний правый блок</div>
+            <div class="bottom-right-block">Нижний правый блок</div>
+          </div>
+        </div>
     </div>
   </div>
 </div>
