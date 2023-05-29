@@ -47,9 +47,13 @@ def conversations_list(request):
     context = {}
 
     if number:
-        number = int(number)
-        conversations = conversations.filter(id__icontains=number)
-        context['number'] = number
+        try:
+            number = int(number)
+            conversations = conversations.filter(id__icontains=number)
+            context['number'] = number
+        except:
+            context['number'] = 'Введите число'
+        
 
     if date:
         date1 = date
