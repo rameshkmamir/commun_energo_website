@@ -21,14 +21,7 @@
   <aside>
     <img src="{% static '/main/img/logo.png' %}" alt="logo">
     <ul>
-      <a href="{% url 'home' %}">
-        <li>
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up-arrow nav-icon" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5Z"/>
-          </svg>
-          Статистика
-        </li>
-      </a> 
+      
       <a href="{% url 'conversations_list' %}">
         <li>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -39,6 +32,14 @@
         </li>
       </a>
       {% if user.groups.all.0.name != 'Обычные пользователи'%}
+      <a href="{% url 'home' %}">
+        <li>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up-arrow nav-icon" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5Z"/>
+          </svg>
+          Статистика
+        </li>
+      </a> 
       <a href="{% url 'users' %}">
         <li>
           <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16">
@@ -47,6 +48,8 @@
           Пользователи
         </li>
       </a>
+      {% endif %}
+      {% if user.groups.all.0.name == 'Администратор'%}
       <a href="{% url 'settings' %}">
         <li>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -58,6 +61,7 @@
         </li>
       </a>
       {% endif %}
+      
     </ul>
   </aside>
 </div>

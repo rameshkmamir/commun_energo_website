@@ -606,3 +606,19 @@ input[type="password"] {
 .chat-all {
   margin-left: 10px;
 }
+
+.register-form
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  background-color: #202020;
+  width: 100%;
+  padding: 12px 20px;
+  margin: 5px 0 15px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: white;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
+}

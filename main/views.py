@@ -4,10 +4,18 @@ from messages_home.models import Conversation
 from django.db.models import Count
 from urllib.parse import unquote_plus
 from django.db.models import Q
+from django.contrib.auth.models import User, Group
+from django.shortcuts import render, redirect
 
 def index(request):
-    # Получение данных из базы данных
-    conversations = Conversation.objects.all()
+    user = request.user
+    if user.is_authenticated and user.groups.filter(name='Обычные пользователи').exists():
+          return redirect ('conversations_list')
+    if user.is_authenticated and user.groups.filter(name='Поддержка').exists():
+        conversations = Conversation.objects.filter(Q(user2__username__icontains=user))
+    else: 
+        conversations = Conversation.objects.all()
+
     data = {
         'labels': [],
         'datasets': [
@@ -62,7 +70,15 @@ def index(request):
     return render(request, "main/index.html", context=context)
 
 def settings(request):
+  user = request.user
+
   data = {
     "title": "Настройки",
   }
-  return render(request, "main/settings.html", data)
+  if user.is_authenticated and user.groups.filter(name='Администратор').exists():
+    return render(request, "main/settings.html", data)
+  else:
+    previous_page = request.META.get('HTTP_REFERER')
+    return redirect (previous_page)
+  
+  

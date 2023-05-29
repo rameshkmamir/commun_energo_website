@@ -14,7 +14,11 @@ def login_view(request):
       user = authenticate(request, username=username, password=password)
       if user is not None:
         login(request, user)
-        return redirect('home')
+        if user.is_authenticated and user.groups.filter(name='Обычные пользователи').exists():
+          return redirect ('conversations_list')
+        else: 
+          return redirect('home')
+      
   else:
     form = CustomAuthenticationForm()
   return render(request, 'login/login.html', {'form': form})

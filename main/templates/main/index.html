@@ -140,10 +140,12 @@
         <form method="get" class="filter-form" action="">
           <div class="filters-boxes">
             <div class="filters-up-row" style="margin-top: 15px;">
+              {% if user.groups.all.0.name != 'Поддержка'%}
               <div class="user_box filter-box">
                 <label for="user_name">Назначена на сотрудника</label>
                 <input type="text" class="" id="user_name" name="user_name" placeholder="Введите имя пользователя" value="{{ recipient }}">
               </div>
+              {% endif %}
               <div class="date-box-1 filter-box">
                 <label for="date_start">Обращение от</label>
                 <input type="date" class="form-control forms-stat-date" id="date_start" name="date_start" value="{{ date_start }}">

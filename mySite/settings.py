@@ -128,7 +128,9 @@ STATICFILES_DIRS = [
   BASE_DIR / "main/static"
 ]
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'conversations_list'
 LOGIN_URL = 'login'
 LOGIN_REQUIRED = False
 LOGOUT_REDIRECT_URL = 'login'
+
+SHORT_DATETIME_FORMAT = 'm.d/Y H:i' 
