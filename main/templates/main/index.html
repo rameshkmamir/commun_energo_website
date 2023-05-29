@@ -52,21 +52,24 @@
                 data: activeData,
                 backgroundColor: "rgba(75, 192, 192, 0.2)",
                 borderColor: "rgba(75, 192, 192, 1)",
-                borderWidth: 1
+                borderWidth: 1,
+                tension: 0.4
               },
               {
                 label: data.datasets[1].label,
                 data: closedData,
                 backgroundColor: "rgba(255, 99, 132, 0.2)",
                 borderColor: "rgba(255, 99, 132, 1)",
-                borderWidth: 1
+                borderWidth: 1,
+                tension: 0.4
               },
               {
                 label: data.datasets[2].label,
                 data: snoozedData,
                 backgroundColor: "rgba(54, 162, 235, 0.2)",
                 borderColor: "rgba(54, 162, 235, 1)",
-                borderWidth: 1
+                borderWidth: 1,
+                tension: 0.4
               }
             ]
           };
@@ -137,40 +140,49 @@
         <form method="get" class="filter-form" action="">
           <div class="filters-boxes">
             <div class="filters-up-row" style="margin-top: 15px;">
-                <div class="user_box filter-box">
-                  <label for="user_name">Назначена на сотрудника</label>
-                  <input type="text" class="" id="user_name" name="user_name" placeholder="Введите имя пользователя">
-                </div>
-                <div class="date-box-1 filter-box">
-                  <label for="date_start">Обращение от</label>
-                  <input type="date" class="form-control forms-stat-date" id="date" name="date_start">
-                </div>
-                <div class="date-box-1 filter-box">
-                  <label for="date_end">Обращение до</label>
-                  <input type="date" class="form-control forms-stat-date" id="date" name="date_end">
-                </div>
-
-                <div class="btn-box filter-box">
-                  <button type="submit" id='w131' class="submit-btn-filter btn-stat-filter">Фильтровать</button>
-                </div>
+              <div class="user_box filter-box">
+                <label for="user_name">Назначена на сотрудника</label>
+                <input type="text" class="" id="user_name" name="user_name" placeholder="Введите имя пользователя" value="{{ recipient }}">
+              </div>
+              <div class="date-box-1 filter-box">
+                <label for="date_start">Обращение от</label>
+                <input type="date" class="form-control forms-stat-date" id="date_start" name="date_start" value="{{ date_start }}">
+              </div>
+              <div class="date-box-1 filter-box">
+                <label for="date_end">Обращение до</label>
+                <input type="date" class="form-control forms-stat-date" id="date_end" name="date_end" value="{{ date_end }}">
+              </div>
+              <div class="btn-box filter-box">
+                <button type="submit" id="w131" class="submit-btn-filter btn-stat-filter">Фильтровать</button>
+              </div>
             </div>
-
           </div>
         </form>
+        
       </div>
         <div id="data" style="display: none;">{{ data|safe }}</div>
         <div class="container">
-          <div class="left-block">
+          
             <canvas id="chart">
             </canvas>
-          </div>
+          
+          <!--
           <div class="right-block">
             <div class="top-right-block">Верхний правый блок</div>
             <div class="bottom-right-block">Нижний правый блок</div>
           </div>
+          -->
         </div>
     </div>
   </div>
 </div>
+<script>
+          
+  const filterBtn = document.getElementById('filter-btn');
+  const filterBox = document.getElementById('q1s1');
 
+  filterBtn.addEventListener('click', (event) => {
+    filterBox.classList.toggle('hidden');
+  });
+</script>
 {% endblock %}

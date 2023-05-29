@@ -13,6 +13,7 @@ import imghdr
 import json
 from .forms import MessageForm, ConversationForm
 from .models import Conversation, Message, Attachment
+from django.db.models import Max, Subquery, OuterRef
 
 @login_required
 def conversations_list(request):
@@ -36,25 +37,33 @@ def conversations_list(request):
         conversations = Conversation.objects.filter(
             Q(user1__in=normal_users) | Q(user2__in=normal_users))
     else:
-        # Формирование фильтрации запроса на основе GET-параметров
         conversations = Conversation.objects.all()
+    
     number = request.GET.get('number')
     date = request.GET.get('date')
     status = request.GET.get('status')
     sender = request.GET.get('sender')
     recipient = request.GET.get('recipient')
+    context = {}
 
     if number:
         number = int(number)
         conversations = conversations.filter(id__icontains=number)
+        context['number'] = number
+
     if date:
+        date1 = date
         date = datetime.strptime(date, '%Y-%m-%d').date()
         start_date = datetime.combine(date, time.min)
         end_date = datetime.combine(date, time.max)
         conversations = conversations.filter(
             created_at__gte=start_date, created_at__lt=end_date)
+        context['date'] = date1
+
     if status:
         conversations = conversations.filter(status=status)
+        context['status'] = status
+
     if sender:
         sender = unquote_plus(sender)
         sender_parts = sender.split()
@@ -65,6 +74,7 @@ def conversations_list(request):
             sender_filter = Q(user1__first_name__icontains=sender) | Q(
                 user1__last_name__icontains=sender)
         conversations = conversations.filter(sender_filter)
+        context['sender'] = sender
 
     if recipient:
         recipient = unquote_plus(recipient)
@@ -76,10 +86,21 @@ def conversations_list(request):
             recipient_filter = Q(user2__first_name__icontains=recipient) | Q(
                 user2__last_name__icontains=recipient)
         conversations = conversations.filter(recipient_filter)
+        context['recipient'] = recipient
+        print(recipient)
 
-    return render(request, 'messages_home/conversations_list.html', {
+    conversations = conversations.annotate(
+    latest_message_time=Subquery(
+        Message.objects.filter(conversation=OuterRef('pk')).values('created_at').order_by('-created_at')[:1]
+    )).order_by('-latest_message_time')
+
+    context.update({
         'conversations': conversations
     })
+
+    print(context)
+
+    return render(request, 'messages_home/conversations_list.html', context=context)
 
 
 @login_required

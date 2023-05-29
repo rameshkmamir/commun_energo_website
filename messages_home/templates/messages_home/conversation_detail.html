@@ -1,6 +1,7 @@
 {% extends 'main/layout.html' %}
 {% load static %}
 {% load attachment_filter %}
+{% block title %}Заявка {{ conversation.id }}{% endblock %}
 {% block pagename %}
 <h1>Тема обращения: "{{ conversation.title }}"</h1>
 {% endblock%}

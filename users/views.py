@@ -3,6 +3,7 @@ from django.contrib.auth.models import User, Group
 from messages_home.models import Conversation, Message, Attachment
 from urllib.parse import unquote_plus
 from django.db.models import Q
+from django.db.models import Max, Subquery, OuterRef
 
 def users(request):
     users = User.objects.all()
@@ -26,6 +27,11 @@ def users(request):
             user_access = unquote_plus(user_access)
             user_access_filter = Q(groups__name__icontains=user_access)
             users = users.filter(user_access_filter)
+
+    conversations = conversations.annotate(
+    latest_message_time=Subquery(
+        Message.objects.filter(conversation=OuterRef('pk')).values('created_at').order_by('-created_at')[:1]
+    )).order_by('-latest_message_time')    
     context = {
         'users': users,
         'conversations': conversations,
