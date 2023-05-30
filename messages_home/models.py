@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 import imghdr
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -45,7 +46,7 @@ class Message(models.Model):
     Conversation, related_name='messages', on_delete=models.CASCADE)
   sender = models.ForeignKey(
     User, related_name='messages', on_delete=models.CASCADE)
-  created_at = models.DateTimeField(auto_now_add=True)
+  created_at = models.DateTimeField(default=timezone.now)
   attachment = models.ForeignKey(Attachment, on_delete=models.CASCADE, null=True, blank=True)
 
   class Meta:

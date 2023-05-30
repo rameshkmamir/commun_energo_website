@@ -1,5 +1,7 @@
 {% extends 'main/layout.html' %}
 {% block title %}Пользователи{% endblock %}
+{% load tz %}
+{% get_current_timezone as TIME_ZONE %}
 {% block pagename %}
 <h1>Пользователи</h1>
 {% endblock%}
@@ -70,7 +72,7 @@
               {% endfor%}
             </ol>
           </td>
-          <td>{{ user.last_login|date:"SHORT_DATETIME_FORMAT" }}</td>
+          <td>{{ user.last_login|localtime|date:"d-m-Y H:i" }}</td>
         </tr>
         {% endfor %}
       </tbody>

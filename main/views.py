@@ -42,13 +42,17 @@ def index(request):
         context['recipient'] = recipient
     if date_start and date_end:
         date_filter =  Q(created_at__gte=date_start) & Q(created_at__lte=date_end)
-        conversations = conversations.filter(date_filter) 
+        conversations = conversations.filter(date_filter)
+        context['date_start'] = date_start
+        context['date_end'] = date_end
     if date_start and not(date_end):
         date_filter =  Q(created_at__gte=date_start)
         conversations = conversations.filter(date_filter)
+        context['date_start'] = date_start
     if date_end and not(date_start):
         date_filter =  Q(created_at__lte=date_end)
         conversations = conversations.filter(date_filter)
+        context['date_end'] = date_end
 
 
     # Формирование данных для графика
@@ -64,8 +68,6 @@ def index(request):
 
     context.update({
         'data': json.dumps(data),
-        'date_end': date_end,
-        'date_start': date_start
     })
     return render(request, "main/index.html", context=context)
 

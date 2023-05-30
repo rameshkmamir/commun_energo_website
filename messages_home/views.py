@@ -111,10 +111,11 @@ def conversations_list(request):
 def conversation_detail(request, conversation_id):
     conversation = get_object_or_404(Conversation.objects.filter(Q(id=conversation_id)))
     messages = conversation.messages.all()
-    attachments = Attachment.objects.filter(message__conversation=conversation)
     support_group = Group.objects.get(name='Поддержка')
-    support_users = User.objects.filter(groups__name=support_group.name)
-    
+    admin_group = Group.objects.get(name='Администратор')
+    support_users = User.objects.filter(Q(groups__name=support_group.name) | Q(groups__name=admin_group.name))
+
+    print(support_users)
     if request.method == 'POST':
         form = MessageForm(request.POST, request.FILES)
         if form.is_valid():
@@ -125,34 +126,22 @@ def conversation_detail(request, conversation_id):
             if attachment is not None:
                 attachment = Attachment.objects.create(
                     file=attachment,
-                    uploaded_by=request.user
+                    uploaded_by=request.user               
                 )
+                print('file saved in database')
+
             message.attachment = attachment
 
-            if request.user.groups.filter(name='Поддержка').exists():
+
+            if (request.user.groups.filter(name='Поддержка').exists()) or (request.user.groups.filter(name='Администратор').exists()) :
                 conversation.user2 = message.sender
             conversation.save()
             message.save()
 
             created_at = message.created_at
-            formatted_date = created_at.strftime('%d %B %Y г. %H:%M')
-            formatted_date = formatted_date.replace(
-            formatted_date.split()[1],
-            {
-                "January": "января",
-                "February": "февраля",
-                "March": "марта",
-                "April": "апреля",
-                "May": "мая",
-                "June": "июня",
-                "July": "июля",
-                "August": "августа",
-                "September": "сентября",
-                "October": "октября",
-                "November": "ноября",
-                "December": "декабря",
-            }[formatted_date.split()[1]],)
-            
+            formatted_date_js = created_at.isoformat()
+
+            print('some date manipulations')
             # сохраняем вложение в модель Attachment
             
             if message.attachment is not None:              
@@ -162,19 +151,21 @@ def conversation_detail(request, conversation_id):
                     'sender': message.sender.username,
                     'sender_first_name': message.sender.first_name,
                     'sender_last_name': message.sender.last_name,
-                    'created_at': formatted_date,
+                    'created_at': formatted_date_js,
                     'user': request.user.username,
                 }
-                print(message.sender.username)
+                print('data saved for response')
+                
             else:
                 message_data = {
                     'text': message.text,
                     'sender': message.sender.username,
                     'sender_first_name': message.sender.first_name,
                     'sender_last_name': message.sender.last_name,
-                    'created_at': formatted_date,
+                    'created_at': formatted_date_js,
                     'user': request.user.username,
                 }
+            print('data returned')
             return JsonResponse({'message': message_data})
     else:
         form = MessageForm()

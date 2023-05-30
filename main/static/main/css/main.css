@@ -599,9 +599,6 @@ input[type="password"] {
   margin-top: 0;
 }
 
-.date-box-1 {
-  margin-bottom: 15px;
-}
 
 .chat-all {
   margin-left: 10px;
@@ -622,3 +619,11 @@ input[type="password"] {
   color: white;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
 }
+
+ .form-control::placeholder {
+    color: #999999;
+  }
+
+  .date-box {
+   margin-top: 15px;
+  }

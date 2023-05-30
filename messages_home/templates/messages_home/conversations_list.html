@@ -1,6 +1,8 @@
 {% extends 'main/layout.html' %}
 {% block title %}Заявки{% endblock %}
 {% block pagename %}
+{% load tz %}
+{% get_current_timezone as TIME_ZONE %}
 <h1>Заявки</h1>
 {% endblock%}
 {% block main_content %}
@@ -43,9 +45,17 @@
                 placeholder="Введите номер заявки">
             </div>
             <div class="date-box filter-box">
-              <label for="date">Дата обращения</label>
-              <input value="{{ date }}" type="date" class="form-control forms-stat-date" id="date" name="date">
-            </div>
+                <label for="date">Дата обращения</label>
+                <input type="text" class="form-control forms-stat-date flatpickr-input" id="date" name="date" placeholder="дд.мм.гг" autocomplete="off" value="{{ date }}">
+              </div>
+              <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                  flatpickr('#date', {
+                    dateFormat: 'Y-m-d',
+                    placeholder: 'дд.мм.гг'
+                  });
+                });
+              </script>
             {% if user.groups.all.0.name != 'Обычные пользователи'%}
             <div class="status-box filter-box">
               <label for="status">Статус заявки</label>
@@ -99,7 +109,7 @@
         <tr>
           <td><a href="{% url 'conversation_detail' conversation.id %}">{{ conversation.id }}</a></td>
           <td>{{ conversation.title }}</td>
-          <td>{{ conversation.created_at|date:"SHORT_DATETIME_FORMAT" }}</td>
+          <td>{{ conversation.created_at|localtime|date:"d-m-Y H:i" }}</td>
           {% if user.groups.all.0.name != 'Обычные пользователи'%}
           <td>{{ conversation.user1.first_name}} {{ conversation.user1.last_name }}</td>
           <td>{{ conversation.user2.first_name}} {{ conversation.user2.last_name }}</td>
