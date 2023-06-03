@@ -6,22 +6,22 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-  dependencies = [
-    migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-    ('messages_home', '0001_initial'),
-  ]
+    dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('messages_home', '0001_initial'),
+    ]
 
-  operations = [
-    migrations.AlterField(
-      model_name='conversation',
-      name='user1',
-      field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='conversations_started',
-                              to=settings.AUTH_USER_MODEL),
-    ),
-    migrations.AlterField(
-      model_name='conversation',
-      name='user2',
-      field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE,
-                              related_name='conversations_involved', to=settings.AUTH_USER_MODEL),
-    ),
-  ]
+    operations = [
+        migrations.AlterField(
+            model_name='conversation',
+            name='user1',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='conversations_started',
+                                    to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.AlterField(
+            model_name='conversation',
+            name='user2',
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='conversations_involved', to=settings.AUTH_USER_MODEL),
+        ),
+    ]

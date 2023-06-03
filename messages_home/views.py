@@ -1,19 +1,18 @@
+import json
 from datetime import datetime, time
-from time import sleep
 from urllib.parse import unquote_plus
-from django.forms.models import model_to_dict
-from django.conf import settings
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
 from django.db.models import Q
+from django.db.models import Subquery, OuterRef
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-import imghdr
-import json
+
 from .forms import MessageForm, ConversationForm
 from .models import Conversation, Message, Attachment
-from django.db.models import Max, Subquery, OuterRef
+
 
 @login_required
 def conversations_list(request):
@@ -38,7 +37,7 @@ def conversations_list(request):
             Q(user1__in=normal_users) & Q(user1__username=user))
     else:
         conversations = Conversation.objects.all()
-    
+
     number = request.GET.get('number')
     date = request.GET.get('date')
     status = request.GET.get('status')
@@ -53,7 +52,6 @@ def conversations_list(request):
             context['number'] = number
         except:
             context['number'] = 'Введите число'
-        
 
     if date:
         date1 = date
@@ -94,15 +92,13 @@ def conversations_list(request):
         print(recipient)
 
     conversations = conversations.annotate(
-    latest_message_time=Subquery(
-        Message.objects.filter(conversation=OuterRef('pk')).values('created_at').order_by('-created_at')[:1]
-    )).order_by('-latest_message_time')
+        latest_message_time=Subquery(
+            Message.objects.filter(conversation=OuterRef('pk')).values('created_at').order_by('-created_at')[:1]
+        )).order_by('-latest_message_time')
 
     context.update({
         'conversations': conversations
     })
-
-    print(context)
 
     return render(request, 'messages_home/conversations_list.html', context=context)
 
@@ -126,14 +122,14 @@ def conversation_detail(request, conversation_id):
             if attachment is not None:
                 attachment = Attachment.objects.create(
                     file=attachment,
-                    uploaded_by=request.user               
+                    uploaded_by=request.user
                 )
                 print('file saved in database')
 
             message.attachment = attachment
 
-
-            if (request.user.groups.filter(name='Поддержка').exists()) or (request.user.groups.filter(name='Администратор').exists()) :
+            if (request.user.groups.filter(name='Поддержка').exists()) or (
+            request.user.groups.filter(name='Администратор').exists()):
                 conversation.user2 = message.sender
             conversation.save()
             message.save()
@@ -141,10 +137,7 @@ def conversation_detail(request, conversation_id):
             created_at = message.created_at
             formatted_date_js = created_at.isoformat()
 
-            print('some date manipulations')
-            # сохраняем вложение в модель Attachment
-            
-            if message.attachment is not None:              
+            if message.attachment is not None:
                 message_data = {
                     'attachment': message.attachment.file.url,
                     'text': message.text,
@@ -155,7 +148,7 @@ def conversation_detail(request, conversation_id):
                     'user': request.user.username,
                 }
                 print('data saved for response')
-                
+
             else:
                 message_data = {
                     'text': message.text,
@@ -177,7 +170,7 @@ def conversation_detail(request, conversation_id):
         'user': request.user,
         'support_users': support_users,
     }
-    
+
     return render(request, 'messages_home/conversation_detail.html', context)
 
 
@@ -227,24 +220,26 @@ def conversation_new(request):
         form = ConversationForm()
     return render(request, 'messages_home/new_conversation.html', {'form': form})
 
+
 @login_required
 def update_conversation_user(request, conversation_id):
     body_unicode = request.body.decode('utf-8')
     data = json.loads(body_unicode)
     user_id = data.get("user_id")
     conversation = Conversation.objects.get(pk=conversation_id)
-    try: 
+    try:
         user = User.objects.get(first_name=user_id.split(' ')[0], last_name=user_id.split(' ')[1])
-    except: 
+    except:
         user = None
     conversation.user2 = user
     conversation.save()
     return JsonResponse({"success": True})
 
-@login_required 
+
+@login_required
 def update_conversation_status(request, conversation_id):
     body_unicode = request.body.decode('utf-8')
-    data = json.loads(body_unicode) 
+    data = json.loads(body_unicode)
     status_id = data.get("selected_status")
     conversation = Conversation.objects.get(pk=conversation_id)
     conversation.status = str(status_id)

@@ -4,15 +4,15 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-  dependencies = [
-    ('messages_home', '0002_alter_conversation_user1_alter_conversation_user2'),
-  ]
+    dependencies = [
+        ('messages_home', '0002_alter_conversation_user1_alter_conversation_user2'),
+    ]
 
-  operations = [
-    migrations.AlterField(
-      model_name='conversation',
-      name='status',
-      field=models.CharField(choices=[('active', 'Активная'), ('closed', 'Закрыта'), ('snoozed', 'Отложена')],
-                             default='Активная', max_length=20),
-    ),
-  ]
+    operations = [
+        migrations.AlterField(
+            model_name='conversation',
+            name='status',
+            field=models.CharField(choices=[('active', 'Активная'), ('closed', 'Закрыта'), ('snoozed', 'Отложена')],
+                                   default='Активная', max_length=20),
+        ),
+    ]

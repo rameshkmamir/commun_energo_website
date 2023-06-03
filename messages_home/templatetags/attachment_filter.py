@@ -1,7 +1,9 @@
-from django import template
 import imghdr
 
+from django import template
+
 register = template.Library()
+
 
 @register.filter
 def is_image(attachment):
@@ -9,7 +11,8 @@ def is_image(attachment):
         return imghdr.what(attachment.file) is not None
     except:
         return False
-    
-@register.filter    
+
+
+@register.filter
 def replace(value, arg):
     return value.replace(arg, '')

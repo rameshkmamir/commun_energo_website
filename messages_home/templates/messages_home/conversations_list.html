@@ -7,119 +7,123 @@
 {% endblock%}
 {% block main_content %}
 <div class="row">
-  <div class="col-md-12">
-    <button class="blue-button" id="new-conv-btn">
-      Создать новую заявку
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle"
-        viewBox="0 0 16 16">
-        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-        <path
-          d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-      </svg>
-    </button>
-    <button id="filter-btn" class="blue-button">
-      Фильтры
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel"
-        viewBox="0 0 16 16">
-        <path
-          d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z" />
-      </svg>
-    </button>
-    <div class="new-conversation-form-box hidden" id="s1w1">
-      <form method="post" class="new-conversation-form" id="new-conversation-form">
-        {% csrf_token %}
-        <div>
-          <label for="id_title">Тема обращения</label>
-          <input type="text" name="title" id="id_title" placeholder="Введите тему обращения. Не более 50 символов.">
+    <div class="col-md-12">
+        <button class="blue-button" id="new-conv-btn">
+            Создать новую заявку
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle"
+                 viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path
+                        d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>
+        </button>
+        <button id="filter-btn" class="blue-button">
+            Фильтры
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel"
+                 viewBox="0 0 16 16">
+                <path
+                        d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2h-11z"/>
+            </svg>
+        </button>
+        <div class="new-conversation-form-box hidden" id="s1w1">
+            <form method="post" class="new-conversation-form" id="new-conversation-form">
+                {% csrf_token %}
+                <div>
+                    <label for="id_title">Тема обращения</label>
+                    <input type="text" name="title" id="id_title"
+                           placeholder="Введите тему обращения. Не более 50 символов.">
+                </div>
+                <button type="submit" class="submit-btn-filter create-conv-bnt">Создать заявку</button>
+            </form>
         </div>
-        <button type="submit" class="submit-btn-filter create-conv-bnt">Создать заявку</button>
-      </form>
-    </div>
-    <div class="filter-form-conversations" id="q1s1">
-      <form method="get" class="filter-form" action="">
-        <div class="filters-boxes">
-          <div class="filters-up-row">
-            <div class="number-box filter-box">
-              <label for="number">Номер заявки</label>
-              <input value="{{ number }}" type="text" class="" id="number" name="number"
-                placeholder="Введите номер заявки">
-            </div>
-            <div class="date-box filter-box">
-                <label for="date">Дата обращения</label>
-                <input type="text" class="form-control forms-stat-date flatpickr-input" id="date" name="date" placeholder="дд.мм.гг" autocomplete="off" value="{{ date }}">
-              </div>
-              <script>
+        <div class="filter-form-conversations" id="q1s1">
+            <form method="get" class="filter-form" action="">
+                <div class="filters-boxes">
+                    <div class="filters-up-row">
+                        <div class="number-box filter-box">
+                            <label for="number">Номер заявки</label>
+                            <input value="{{ number }}" type="text" class="" id="number" name="number"
+                                   placeholder="Введите номер заявки">
+                        </div>
+                        <div class="date-box filter-box">
+                            <label for="date">Дата обращения</label>
+                            <input type="text" class="form-control forms-stat-date flatpickr-input" id="date"
+                                   name="date" placeholder="дд.мм.гг" autocomplete="off" value="{{ date }}">
+                        </div>
+                        <script>
                 document.addEventListener('DOMContentLoaded', function() {
                   flatpickr('#date', {
                     dateFormat: 'Y-m-d',
                     placeholder: 'дд.мм.гг'
                   });
                 });
-              </script>
-            {% if user.groups.all.0.name != 'Обычные пользователи'%}
-            <div class="status-box filter-box">
-              <label for="status">Статус заявки</label>
-              <select class="form-control forms-stat-date" id="status" name="status">
-                <option class="status-option" value="Активная" {% if status == 'Активная' %}selected{% endif %}>Активная
-                </option>
-                <option class="status-option" value="Отложена" {% if status == 'Отложена' %}selected{% endif %}>Отложена
-                </option>
-                <option class="status-option" value="Закрыта" {% if status == 'Закрыта' %}selected{% endif %}>Закрыта
-                </option>
-              </select>
-            </div>
-            {% endif %}
-          </div>
-          <div class="filters-bot-row">
-            {% if user.groups.all.0.name != 'Обычные пользователи'%}
-            <div class="sender-box filter-box">
-              <label for="sender" class="">Отправитель</label>
-              <div class="">
-                <input value="{{ sender }}" type="text" name="sender" class="" id="sender" placeholder="Введите имя">
-              </div>
-            </div>
-            <div class="recipient-box filter-box">
-              <label for="recipient" class="">Назначена на сотрудника</label>
-              <input value="{{ recipient }}" type="text" name="recipient" class="" id="recipient"
-                placeholder="Введите имя сотрудника">
-            </div>
-            {% endif %}
-            <div class="btn-box filter-box">
-              <button type="submit" id='w131' class="submit-btn-filter">Фильтровать</button>
-            </div>
-          </div>
+
+                        </script>
+                        {% if user.groups.all.0.name != 'Обычные пользователи'%}
+                        <div class="status-box filter-box">
+                            <label for="status">Статус заявки</label>
+                            <select class="form-control forms-stat-date" id="status" name="status">
+                                <option class="status-option" value="Активная" {% if status == 'Активная' %}selected{% endif %}>Активная
+                                </option>
+                                <option class="status-option" value="Отложена" {% if status == 'Отложена' %}selected{% endif %}>Отложена
+                                </option>
+                                <option class="status-option" value="Закрыта" {% if status == 'Закрыта' %}selected{% endif %}>Закрыта
+                                </option>
+                            </select>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="filters-bot-row">
+                        {% if user.groups.all.0.name != 'Обычные пользователи'%}
+                        <div class="sender-box filter-box">
+                            <label for="sender" class="">Отправитель</label>
+                            <div class="">
+                                <input value="{{ sender }}" type="text" name="sender" class="" id="sender"
+                                       placeholder="Введите имя">
+                            </div>
+                        </div>
+                        <div class="recipient-box filter-box">
+                            <label for="recipient" class="">Назначена на сотрудника</label>
+                            <input value="{{ recipient }}" type="text" name="recipient" class="" id="recipient"
+                                   placeholder="Введите имя сотрудника">
+                        </div>
+                        {% endif %}
+                        <div class="btn-box filter-box">
+                            <button type="submit" id='w131' class="submit-btn-filter">Фильтровать</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
-      </form>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Номер заявки</th>
+                <th>Тема обращения</th>
+                <th>Дата создания</th>
+                {% if user.groups.all.0.name != 'Обычные пользователи'%}
+                <th>Отправитель</th>
+                <th>Назначен на сотрудника</th>
+                <th>Статус</th>
+                {% endif %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for conversation in conversations %}
+            <tr>
+                <td><a href="{% url 'conversation_detail' conversation.id %}">{{ conversation.id }}</a></td>
+                <td>{{ conversation.title }}</td>
+                <td>{{ conversation.created_at|localtime|date:"d-m-Y H:i" }}</td>
+                {% if user.groups.all.0.name != 'Обычные пользователи'%}
+                <td>{{ conversation.user1.first_name}} {{ conversation.user1.last_name }}</td>
+                <td>{{ conversation.user2.first_name}} {{ conversation.user2.last_name }}</td>
+                <td>{{ conversation.status}}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Номер заявки</th>
-          <th>Тема обращения</th>
-          <th>Дата создания</th>
-          {% if user.groups.all.0.name != 'Обычные пользователи'%}
-          <th>Отправитель</th>
-          <th>Назначен на сотрудника</th>
-          <th>Статус</th>
-          {% endif %}
-        </tr>
-      </thead>
-      <tbody>
-        {% for conversation in conversations %}
-        <tr>
-          <td><a href="{% url 'conversation_detail' conversation.id %}">{{ conversation.id }}</a></td>
-          <td>{{ conversation.title }}</td>
-          <td>{{ conversation.created_at|localtime|date:"d-m-Y H:i" }}</td>
-          {% if user.groups.all.0.name != 'Обычные пользователи'%}
-          <td>{{ conversation.user1.first_name}} {{ conversation.user1.last_name }}</td>
-          <td>{{ conversation.user2.first_name}} {{ conversation.user2.last_name }}</td>
-          <td>{{ conversation.status}}</td>
-          {% endif %}
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
 </div>
 <script>
 
@@ -198,6 +202,7 @@
     newConversationBox.classList.toggle('hidden');
     filterBox.classList.add('hidden');
   });
+
 
 
 </script>

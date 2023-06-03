@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('messages_home', '0006_alter_attachment_file_alter_message_created_at'),
     ]

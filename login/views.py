@@ -6,24 +6,24 @@ from .forms import CustomAuthenticationForm
 
 
 def login_view(request):
-  if request.method == 'POST':
-    form = CustomAuthenticationForm(request, data=request.POST)
-    if form.is_valid():
-      username = form.cleaned_data.get('username')
-      password = form.cleaned_data.get('password')
-      user = authenticate(request, username=username, password=password)
-      if user is not None:
-        login(request, user)
-        if user.is_authenticated and user.groups.filter(name='Обычные пользователи').exists():
-          return redirect ('conversations_list')
-        else: 
-          return redirect('home')
-      
-  else:
-    form = CustomAuthenticationForm()
-  return render(request, 'login/login.html', {'form': form})
+    if request.method == 'POST':
+        form = CustomAuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                if user.is_authenticated and user.groups.filter(name='Обычные пользователи').exists():
+                    return redirect('conversations_list')
+                else:
+                    return redirect('home')
+
+    else:
+        form = CustomAuthenticationForm()
+    return render(request, 'login/login.html', {'form': form})
 
 
 def logout_view(request):
-  logout(request)
-  return redirect('login')
+    logout(request)
+    return redirect('login')
