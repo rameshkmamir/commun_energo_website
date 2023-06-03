@@ -5,7 +5,7 @@
 {% load attachment_filter %}
 {% block title %}Заявка {{ conversation.id }}{% endblock %}
 {% block pagename %}
-<h1>Тема обращения: "{{ conversation.title }}"</h1>
+<h1 class="conversation-detail-title">{{ conversation.title }}</h1>
 {% endblock%}
 {% block main_content %}
 <div class="row">

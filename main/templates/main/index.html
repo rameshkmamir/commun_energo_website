@@ -14,11 +14,26 @@
     <div class="title-panel">
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       <script>
-        document.addEventListener("DOMContentLoaded", function () {
+      document.addEventListener("DOMContentLoaded", function() {
+  drawChart();
+});
+        function drawChart() {
           var dataString = '{{ data|safe }}'
           var data = JSON.parse(dataString);
+          var body = document.querySelector('body');
+          var themeDiv = document.body;
 
+          if (themeDiv.classList.contains('dark')) {
+            // Темная тема
+            var titleColor = '#fff';
+            var tickColor = '#fff';
+          } else {
+            // Светлая тема
+            var titleColor = '#2E2E2E';
+            var tickColor = '#2E2E2E';
+          }
           var labels = [];
+
           var activeData = [];
           var closedData = [];
           var snoozedData = [];
@@ -52,78 +67,82 @@
                 data: activeData,
                 backgroundColor: "rgba(75, 192, 192, 0.2)",
                 borderColor: "rgba(75, 192, 192, 1)",
-                borderWidth: 1,
-                tension: 0.4
+                borderWidth: 3,
+                tension: 0.3,
               },
               {
                 label: data.datasets[1].label,
                 data: closedData,
                 backgroundColor: "rgba(255, 99, 132, 0.2)",
                 borderColor: "rgba(255, 99, 132, 1)",
-                borderWidth: 1,
-                tension: 0.4
+                borderWidth: 3,
+                tension: 0.3
               },
               {
                 label: data.datasets[2].label,
                 data: snoozedData,
                 backgroundColor: "rgba(54, 162, 235, 0.2)",
                 borderColor: "rgba(54, 162, 235, 1)",
-                borderWidth: 1,
-                tension: 0.4
+                borderWidth: 3,
+                tension: 0.3
               }
             ]
           };
 
 
 
-          var options = {
-            responsive: true,
-            scales: {
-              x: {
-                title: {
-                  display: true,
-                  text: 'Дата',
-                  color: '#fff',
-                },
-                ticks: {
-                  color: '#fff',
-                }
-                
-              },
-              y: {
-                title: {
-                  display: true,
-                  text: 'Количество заявок',
-                  color: '#fff',
-                },
-                ticks: {
-                  stepSize: 1,
-                  color: '#fff', // Отображать только целые числа на оси Y
-                }
-              }
-            },
-            plugins: {
-              title: {
-                display: true,
-                text: 'График заявок по датам',
-                color: '#fff', // Название графика
-              },
-              legend: {
-                labels: {
-                  color: '#fff',
-                }
-                
-              }
-            }
-          };
 
-          var ctx = document.getElementById("chart").getContext("2d");
-          new Chart(ctx, {
-            type: "line",
-            data: chartData,
-            options: options
-          });
-        });
+var options = {
+  responsive: true,
+  scales: {
+    x: {
+      title: {
+        display: true,
+        text: 'Дата',
+        color: titleColor,
+      },
+      ticks: {
+        color: tickColor,
+      }
+    },
+    y: {
+      title: {
+        display: true,
+        text: 'Количество заявок',
+        color: titleColor,
+      },
+      ticks: {
+        stepSize: 1,
+        color: tickColor,
+      }
+    }
+  },
+  plugins: {
+    title: {
+      display: true,
+      text: 'График заявок по датам',
+      color: titleColor,
+    },
+    legend: {
+      labels: {
+        color: titleColor,
+      }
+    }
+  }
+};
+
+  var ctx = document.getElementById("chart").getContext("2d");
+
+  if (window.myChart) {
+    window.myChart.destroy();
+  }
+  window.myChart = new Chart(ctx, {
+    type: "line",
+    data: chartData,
+    options: options
+  });
+
+}
 
 
       </script>

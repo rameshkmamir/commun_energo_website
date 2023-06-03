@@ -35,7 +35,7 @@ def conversations_list(request):
         normal_users = User.objects.filter(
             groups__name='Обычные пользователи')
         conversations = Conversation.objects.filter(
-            Q(user1__in=normal_users) | Q(user2__in=normal_users))
+            Q(user1__in=normal_users) & Q(user1__username=user))
     else:
         conversations = Conversation.objects.all()
     
