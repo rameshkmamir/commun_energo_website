@@ -97,7 +97,6 @@ def report(request):
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="report.pdf"'
-    pdfmetrics.registerFont(TTFont('Arial', 'Arial.ttf'))
     doc = SimpleDocTemplate(response, pagesize=letter)
 
     elements = []
@@ -148,77 +147,62 @@ def report(request):
 
     return response
 
+
 def report_xlsx(request):
-    users = User.objects.filter(groups__name__in=['Администратор', 'Поддержка'])
+  users = User.objects.filter(groups__name__in=['Администратор', 'Поддержка'])
 
-    workbook = openpyxl.Workbook()
-    sheet = workbook.active
+  workbook = openpyxl.Workbook()
+  sheet = workbook.active
 
-    row_num = 1
+  row_num = 1
 
-    for user in users:
-        conversations = Conversation.objects.filter(user2=user)
+  for user in users:
+    conversations = Conversation.objects.filter(user2=user)
 
-        # Создание словаря для хранения данных по датам и статусам
-        data_dict = defaultdict(lambda: [0, 0, 0])
+    data_dict = defaultdict(lambda: [0, 0, 0])  # Обнуляем словарь для каждого пользователя
 
-        for conversation in conversations:
-            date = conversation.created_at.date()
-            status = conversation.status
+    for conversation in conversations:
+      date = conversation.created_at.date()
+      status = conversation.status
 
-            # Увеличение количества заявок по статусу для соответствующей даты
-            if status == 'Активная':
-                data_dict[date][0] += 1
-            elif status == 'Отложена':
-                data_dict[date][1] += 1
-            elif status == 'Закрыта':
-                data_dict[date][2] += 1
+      if status == 'Активная':
+        data_dict[date][0] += 1
+      elif status == 'Отложена':
+        data_dict[date][1] += 1
+      elif status == 'Закрыта':
+        data_dict[date][2] += 1
 
-        # Запись заголовка таблицы для пользователя
-        sheet.merge_cells(start_row=row_num, start_column=1, end_row=row_num, end_column=4)
-        cell = sheet.cell(row=row_num, column=1, value=f'Отчет для пользователя: {user.first_name} {user.last_name}')
+    sheet.merge_cells(start_row=row_num, start_column=1, end_row=row_num, end_column=4)
+    cell = sheet.cell(row=row_num, column=1, value=f'Отчет для сотрудника: {user.first_name} {user.last_name}')
+    cell.alignment = Alignment(horizontal='left')
+    cell.border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'),
+                         bottom=Side(style='thin'))
+    row_num += 1
+
+    headers = ['Дата', 'Активная', 'Отложена', 'Закрыта']
+    for col_num, header in enumerate(headers, 1):
+      col_letter = get_column_letter(col_num)
+      cell = sheet.cell(row=row_num, column=col_num, value=header)
+      cell.alignment = Alignment(horizontal='left')
+      cell.border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'),
+                           bottom=Side(style='thin'))
+      sheet.column_dimensions[col_letter].width = 12
+
+    row_num += 1
+
+    for date, counts in data_dict.items():
+      row = [date.strftime('%Y-%m-%d'), counts[0], counts[1], counts[2]]
+      for col_num, value in enumerate(row, 1):
+        cell = sheet.cell(row=row_num, column=col_num, value=value)
         cell.alignment = Alignment(horizontal='left')
-        cell.border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
-        row_num += 1
+        cell.border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'),
+                             bottom=Side(style='thin'))
+      row_num += 1
 
-        # Запись заголовков столбцов
-        headers = ['Дата', 'Активная', 'Отложена', 'Закрыта']
-        for header in headers:
-            cell = sheet.cell(row=row_num, column=headers.index(header) + 1, value=header)
-            cell.alignment = Alignment(horizontal='left')
-            cell.border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
-        row_num += 1
+    row_num += 1
 
-        for date, counts in data_dict.items():
-            # Запись данных
-            row = [date, counts[0], counts[1], counts[2]]
-            for value in row:
-                cell = sheet.cell(row=row_num, column=row.index(value) + 1, value=value)
-                cell.alignment = Alignment(horizontal='left')
-                cell.border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
-            row_num += 1
+  response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+  response['Content-Disposition'] = 'attachment; filename="report.xlsx"'
+  workbook.save(response)
 
-        # Добавление пропуска между таблицами
-        row_num += 1
-
-    # Расширение столбцов для лучшего визуального представления
-    for col_num, column in enumerate(sheet.columns, 1):
-        max_length = 0
-        for cell in column:
-            if cell.value:
-                cell.alignment = Alignment(horizontal='left', wrapText=True)
-                if len(str(cell.value)) > max_length:
-                    max_length = len(str(cell.value))
-        adjusted_width = (max_length + 2) * 1.2
-        sheet.column_dimensions[openpyxl.utils.get_column_letter(col_num)].width = adjusted_width
-        for row in sheet.iter_rows(min_row=1, max_row=row_num - 1, min_col=1, max_col=4):
-            for cell in row:
-                cell.border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'),
-                                     bottom=Side(style='thin'))
-
-        # Создание HTTP-ответа с файлом Excel
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename="report.xlsx"'
-        workbook.save(response)
-
-        return response
+  return response
