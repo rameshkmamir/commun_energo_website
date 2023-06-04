@@ -432,17 +432,6 @@ main .layout-panel {
   padding: 5px;
 }
 
-.submit-btn-filter {
-  background-color: #54ACFE;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-size: 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  height: 35px;
-  margin-top: 11px;
-}
-
 .create-conv-bnt {
   margin-top: 0px;
 }
@@ -462,17 +451,56 @@ main .layout-panel {
 
 .blue-button {
   background-color: #54ACFE;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-size: 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 15px 0 0 5px;
-  padding: 7px;
-  padding-left: 10px;
   text-decoration: none;
+  display: inline-block;
+  margin-left: 5px;
+  padding: 5px 10px;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, .4);
+  font-weight: 300;
+}
+.blue-button:before, .blue-button:after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  box-sizing: border-box;
+}
+.blue-button:before {
+  bottom: 0;
+  left: 0;
+  border-left: 1px solid white;
+  border-top: 1px solid white;
+  transition: 0s ease opacity .8s, .2s ease width .4s, .2s ease height .6s;
+}
+.blue-button:after {
+  top: 0;
+  right: 0;
+  border-right: 1px solid white;
+  border-bottom: 1px solid white;
+  transition: 0s ease opacity .4s, .2s ease width, .2s ease height .2s;
+}
+.blue-button:hover:before,
+.blue-button:hover:after {
+  height: 100%;
+  width: 100%;
+  opacity: 1;
+}
+.blue-button:hover:before {
+  transition: 0s ease opacity 0s, .2s ease height, .2s ease width .2s;
+}
+.blue-button:hover:after {
+  transition: 0s ease opacity .4s, .2s ease height .4s, .2s ease width .6s;
+}
+.blue-button:hover {
+  background: rgba(0, 0, 0, .1);
 }
 
+.submit-btn-filter {
+  margin-top: 10px;
+  margin-left: 2px;
+}
 .nav-icon {
   margin-right: 5px;
   margin-bottom: 2px;

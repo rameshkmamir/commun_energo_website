@@ -156,7 +156,38 @@ var options = {
                 </svg>
             </button>
             <button class="blue-button" id="report-btn" onclick="sendReport()">
-                Сформировать отчет
+                PDF
+                <svg style="margin-bottom: 3px; margin-left: 2px" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-bar-graph" viewBox="0 0 16 16">
+                  <path d="M10 13.5a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-6a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v6zm-2.5.5a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm-3 0a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1z"/>
+                  <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+                </svg>
+            </button>
+            <script>
+                function sendReportXLSX() {
+    fetch('/report-xlsx', {
+        method: 'GET'
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.arrayBuffer();
+        } else {
+            throw new Error('Ошибка запроса');
+        }
+    })
+    .then(buffer => {
+        const file = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const fileURL = URL.createObjectURL(file);
+        window.open(fileURL, '_blank');
+    })
+    .catch(error => {
+        console.error(error);
+    });
+}
+
+
+            </script>
+            <button class="blue-button" id="" onclick="sendReportXLSX()">
+                XLSX
                 <svg style="margin-bottom: 3px; margin-left: 2px" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-table" viewBox="0 0 16 16">
                   <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm15 2h-4v3h4V4zm0 4h-4v3h4V8zm0 4h-4v3h3a1 1 0 0 0 1-1v-2zm-5 3v-3H6v3h4zm-5 0v-3H1v2a1 1 0 0 0 1 1h3zm-4-4h4V8H1v3zm0-4h4V4H1v3zm5-3v3h4V4H6zm4 4H6v3h4V8z"/>
                 </svg>
@@ -224,7 +255,7 @@ var options = {
 
                             </script>
                             <div class="btn-box filter-box">
-                                <button class="submit-btn-filter btn-stat-filter" id="w131" type="submit">Фильтровать
+                                <button class="blue-button submit-btn-filter btn-stat-filter" id="w131" type="submit">Фильтровать
                                 </button>
                             </div>
                         </div>
