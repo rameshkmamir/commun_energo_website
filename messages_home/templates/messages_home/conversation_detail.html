@@ -53,8 +53,7 @@
                     <img class="attachment-img" src="{{ message.attachment.file.url }}"
                          alt="{{ message.attachment.file.name }}">
                     {% else %}
-                    <a href="{{ message.attachment.file.url }}">{{ message.attachment.file.name|replace:'attachments/'
-                        }}</a>
+                    <a href="{{ message.attachment.file.url }}">{{ message.attachment.file.name|replace:'attachments/' }}</a>
                     {% endif %}
                     {% endif %}
                 </div>
