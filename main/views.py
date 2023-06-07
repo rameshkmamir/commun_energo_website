@@ -93,11 +93,13 @@ def settings(request):
         return redirect(previous_page)
 
 def report(request):
+    pdfmetrics.registerFont(TTFont('Roboto', 'main/templates/main/Roboto/Roboto-Regular.ttf'))
+    style = [('FONTNAME', (0, 0), (-1, -1), 'Roboto')]
     users = User.objects.filter(groups__name__in=['Администратор', 'Поддержка'])
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="report.pdf"'
-    doc = SimpleDocTemplate(response, pagesize=letter)
+    doc = SimpleDocTemplate(response, pagesize=letter, style=style)
 
     elements = []
 
@@ -120,8 +122,8 @@ def report(request):
                 data_dict[date][2] += 1
 
         # Создание таблицы данных
-        table_data = [[f'Report for employee : {user.username}']]
-        table_data.append(['Date', 'Active', 'Snoozed', 'Closed'])
+        table_data = [[f'Отчет для сотрудника : {user.first_name} {user.last_name}']]
+        table_data.append(['Дата', 'Активная', 'Отложена', 'Закрыта'])
 
         for date, counts in data_dict.items():
             row = [date, counts[0], counts[1], counts[2]]
@@ -132,12 +134,13 @@ def report(request):
         column_widths = [table_width * 0.25, table_width * 0.25, table_width * 0.25, table_width * 0.25]
 
         # Создание таблицы для пользователя
-        table = Table(table_data, colWidths=column_widths)
+        table = Table(table_data, colWidths=column_widths, style=style)
         style = TableStyle([
-            ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-            ('GRID', (0, 0), (-1, -1), 1, colors.black),  # Добавление границ ячеек
-            ('SPAN', (0, 0), (-1, 0)),  # Объединение ячеек заголовка
+          ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+          ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+          ('GRID', (0, 0), (-1, -1), 1, colors.black),
+          ('SPAN', (0, 0), (-1, 0)),
+          ('FONTNAME', (0, 0), (-1, -1), 'Roboto'),
         ])
         table.setStyle(style)
 
